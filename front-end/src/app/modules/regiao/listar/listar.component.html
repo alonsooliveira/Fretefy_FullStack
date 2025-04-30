@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="header">
+      <h2>Regiões</h2>
+      <button (click)="goTo()">+ Cadastrar</button>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Nome da região</th>
+          <th>Situação</th>
+          <th>Ativar/Desativar</th>
+          <th>Editar</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let regiao of regioes">
+          <td>{{regiao.nome}}</td>
+          <td>{{regiao.ativo ? 'Ativo' : 'Desativo'}}</td>
+          <td>
+            <div class="btn-group">
+              <button *ngIf="!regiao.ativo" class="btn-ativar" (click)="ativar(regiao)">Ativar</button>
+              <button *ngIf="regiao.ativo" class="btn-desativar" (click)="desativar(regiao)">Desativar</button>
+            </div>
+          </td>
+          <td><a href="#" (click)="editar(regiao.id)" class="edit-link">Editar</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>

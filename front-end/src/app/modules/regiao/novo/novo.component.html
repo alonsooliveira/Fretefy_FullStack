@@ -1,0 +1,32 @@
+<div class="form-container">
+    <div class="form-header">
+        <h2>Cadastro de região</h2>
+    </div>
+
+    <form [formGroup]="regiaoForm">
+        <label for="nome">Nome da região *</label>
+        <input formControlName="nome" type="text" id="nome" placeholder="Digite o nome da região" />
+
+        <h3 style="margin-top: 20px;">Locais da região</h3>
+        <div id="cityList" formArrayName="cidades">
+            <div *ngFor="let cidade of cidades.controls; let i = index;">
+                <div class="city-group" [formGroupName]="i">
+                    <label>Cidade</label>
+                    <select formControlName="id">
+                        <option [selected]="true" value="">Selecione</option>
+                        <option value="0e7c9b72-a2f4-4320-b382-82c465ff36c5">Rio Branco</option>
+                        <option value="69031963-1d00-4ee7-9630-d770587b3e74">São Paulo</option>                       
+                    </select>
+                    <button *ngIf="i > 0" type="button" class="remove-btn" (click)="removerCidade(i)">×</button>
+                </div>
+            </div>
+        </div>
+
+        <button type="button" class="add-btn" (click)="addCidadeFormGroup()">➕ Adicionar Cidade</button>
+
+        <div class="form-footer">
+            <button type="button" class="cancel-btn" (click)="cancelar()">Cancelar</button>
+            <button type="button" class="save-btn" (click)="salvar()">Salvar</button>
+        </div>
+    </form>
+</div>
