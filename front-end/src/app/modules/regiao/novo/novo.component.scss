@@ -29,8 +29,7 @@ label {
   color: #333;
 }
 
-input[type="text"],
-select {
+input[type="text"] {
   width: 100%;
   padding: 10px;
   border: 2px solid #003049;
@@ -106,6 +105,15 @@ select {
   font-size: 13px;
   margin-top: -10px;
   margin-bottom: 10px;
+}
+
+.error-message {
+  color: #ffffff;
+  font-size: 14px;
+  margin-top: 5px;
+  padding: 20px;
+  background-color: rgb(133, 33, 33);
+  font-weight: bold;
 }
 
 @media (max-width: 600px) {

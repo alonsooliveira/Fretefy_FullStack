@@ -11,13 +11,11 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
 {
     public class RegiaoRepository : IRegiaoRepository
     {
-        private DbSet<Regiao> _dbSet;
         private readonly DbContext _context;
 
         public RegiaoRepository(DbContext dbContext)
         {
             _context = dbContext;
-            _dbSet = dbContext.Set<Regiao>();
         }
         public async Task Atualizar(Regiao regiao)
         {
@@ -25,9 +23,18 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
             await _context.SaveChangesAsync();
         }
 
-        public IQueryable<Regiao> Listar()
+        public async Task RemoverCidades(Regiao regiao)
         {
-            return _context.Set<Regiao>().AsQueryable();
+            _context.Set<RegiaoCidade>().RemoveRange(regiao.RegiaoCidades);
+            await _context.SaveChangesAsync();
+        }
+
+        public async Task<List<Regiao>> Listar()
+        {
+            return await _context.Set<Regiao>()
+                .Include(p => p.RegiaoCidades)
+                .ThenInclude(x => x.Cidade)
+                .ToListAsync();
         }
 
         public async Task<Regiao> ListarPorId(Guid id)

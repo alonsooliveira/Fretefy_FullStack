@@ -3,13 +3,14 @@ import { HttpClient } from '@angular/common/http';
 import { RegiaoLista } from '../models/regiao-lista';
 import { Observable } from 'rxjs';
 import { RegiaoModel } from '../models/regiao-model';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RegiaoService {
 
-  private apiUrl = 'http://localhost:55700/api/regiao';
+  private apiUrl = `${environment.baseApiUrl}/regiao`;
 
   constructor(private http: HttpClient) { }
 
@@ -28,6 +29,11 @@ export class RegiaoService {
       .post<boolean>(this.apiUrl, regiao)
   }
 
+  atualizar(regiao: RegiaoModel): Observable<boolean> {
+    return this.http
+      .put<boolean>(this.apiUrl, regiao)
+  }
+
   ativar(id: string): Observable<boolean> {
     return this.http
       .post<boolean>(`${this.apiUrl}/ativar`, { id: id})
@@ -36,5 +42,9 @@ export class RegiaoService {
   desativar(id: string): Observable<boolean> {
     return this.http
     .post<boolean>(`${this.apiUrl}/desativar`, { id: id})
+  }
+
+  exportar(): void {
+    window.open(`${this.apiUrl}/exportar`, '_blank', '')
   }
 }

@@ -9,9 +9,10 @@ namespace Fretefy.Test.Domain.Interfaces.Repositories
 {
     public interface IRegiaoRepository
     {
-        IQueryable<Regiao> Listar();
+        Task<List<Regiao>> Listar();
         Task<Regiao> ListarPorId(Guid id);
         Task Salvar(Regiao regiao);
         Task Atualizar(Regiao regiao);
+        Task RemoverCidades(Regiao regiao);
     }
 }

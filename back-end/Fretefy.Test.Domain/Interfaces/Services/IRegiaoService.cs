@@ -14,5 +14,6 @@ namespace Fretefy.Test.Domain.Interfaces.Services
         Task<ListarRegiaoDTO> ListarRegiaoPorId(Guid id);
         Task Ativar(Guid id);
         Task Desativar(Guid id);
+        Task<IEnumerable<ExportarRegiaoDTO>> Exportar();
     }
 }

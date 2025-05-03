@@ -6,7 +6,7 @@ namespace Fretefy.Test.Domain.Entities
 {
     public class Regiao : IEntity
     {
-        public Guid Id { get ; set; }
+        public Guid Id { get; set; }
         public string Nome { get; set; }
         public bool Ativo { get; set; }
         public ICollection<RegiaoCidade> RegiaoCidades { get; set; }
@@ -27,6 +27,10 @@ namespace Fretefy.Test.Domain.Entities
         public bool VerificarCidadeDuplicada()
         {
             return RegiaoCidades.GroupBy(x => x.CidadeId).Any(g => g.Count() > 1);
+        }
+        public bool VerificarRegiaoComNomeIgual(List<Regiao> regioes)
+        {
+            return regioes.Where(p => p.Nome.Trim().ToUpper() == Nome.Trim().ToUpper() && p.Id != Id).Any();
         }
     }
 }

@@ -5,6 +5,7 @@ import { RegiaoRoutingModule } from './regiao.routing';
 import { ListarComponent } from './listar/listar.component';
 import { NovoComponent } from './novo/novo.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CidadeSelectComponent } from 'src/app/components/select/cidade-select/cidade-select.component';
 
 @NgModule({
   imports: [
@@ -13,7 +14,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     FormsModule,
     ReactiveFormsModule,
   ],
-  declarations: [RegiaoComponent, ListarComponent, NovoComponent],
+  declarations: [RegiaoComponent, ListarComponent, NovoComponent, CidadeSelectComponent],
   exports: [RegiaoComponent, ListarComponent, NovoComponent],
 })
 export class RegiaoModule { }

@@ -2,6 +2,7 @@
     <div class="header">
       <h2>Regiões</h2>
       <button (click)="goTo()">+ Cadastrar</button>
+      <button (click)="exportar()">Exportar</button>
     </div>
     <table>
       <thead>
@@ -15,14 +16,16 @@
       <tbody>
         <tr *ngFor="let regiao of regioes">
           <td>{{regiao.nome}}</td>
-          <td>{{regiao.ativo ? 'Ativo' : 'Desativo'}}</td>
+          <td>{{regiao.ativo ? 'Ativo' : 'Inativo'}}</td>
           <td>
             <div class="btn-group">
               <button *ngIf="!regiao.ativo" class="btn-ativar" (click)="ativar(regiao)">Ativar</button>
               <button *ngIf="regiao.ativo" class="btn-desativar" (click)="desativar(regiao)">Desativar</button>
             </div>
           </td>
-          <td><a href="#" (click)="editar(regiao.id)" class="edit-link">Editar</a></td>
+          <td>
+            <a class="edit-link" href="#" [routerLink]="['/', 'regiao', 'novo', regiao.id]">Editar</a>
+          </td>
         </tr>
       </tbody>
     </table>

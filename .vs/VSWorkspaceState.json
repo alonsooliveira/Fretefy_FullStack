@@ -1,6 +1,12 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\back-end",
+    "\\back-end\\Fretefy.Test.Domain",
+    "\\back-end\\Fretefy.Test.Domain\\Services",
+    "\\back-end\\Fretefy.Test.WebApi",
+    "\\back-end\\Fretefy.Test.WebApi\\Controllers"
   ],
+  "SelectedNode": "\\back-end\\Fretefy.Test.Domain\\Services\\RegiaoService.cs",
   "PreviewInSolutionExplorer": false
 }

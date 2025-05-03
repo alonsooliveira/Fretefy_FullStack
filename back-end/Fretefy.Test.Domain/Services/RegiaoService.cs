@@ -13,6 +13,7 @@ namespace Fretefy.Test.Domain.Services
     public class RegiaoService : IRegiaoService
     {
         private readonly IRegiaoRepository _regiaoRepository;
+        private readonly IValidacaoService _validacaoService;
 
         public RegiaoService(IRegiaoRepository regiaoRepository)
         {
@@ -43,30 +44,31 @@ namespace Fretefy.Test.Domain.Services
         {
             var regiao = await _regiaoRepository.ListarPorId(regiaoDTO.Id);
 
+            await _regiaoRepository.RemoverCidades(regiao);
+
             regiao.Nome = regiaoDTO.Nome;
             regiao.RegiaoCidades = regiaoDTO.Cidades.ToList().Select(cidadeId => new RegiaoCidade
             {
-                Cidade = new Cidade
-                {
-                    Id = cidadeId
-                }
+                CidadeId = cidadeId,
+                RegiaoId = regiaoDTO.Id
             }).ToList();
+
+            await Validar(regiao);
 
             await _regiaoRepository.Atualizar(regiao);
         }
 
         public async Task<IEnumerable<ListarRegiaoDTO>> ListarRegiao()
         {
+            var regioes = await _regiaoRepository.Listar();
 
-            var regioes = _regiaoRepository.Listar().Select(p => new ListarRegiaoDTO
+            return regioes.Select(p => new ListarRegiaoDTO
             {
                 Id = p.Id,
                 Nome = p.Nome,
                 Ativo = p.Ativo,
                 Cidades = null
             }).ToList();
-
-            return regioes;
         }
 
         public async Task<ListarRegiaoDTO> ListarRegiaoPorId(Guid id)
@@ -98,12 +100,37 @@ namespace Fretefy.Test.Domain.Services
 
             regiao.Ativar();
 
-            if (regiao.VerificarCidadeDuplicada())
-            {
-                throw new Exception("Cidade Duplicada na região");
-            }
+            await Validar(regiao);
 
             await _regiaoRepository.Salvar(regiao);
+        }
+
+        private async Task Validar(Regiao regiao)
+        {
+            if (regiao.VerificarCidadeDuplicada())
+            {
+                _validacaoService.AddErro("Cidade Duplicada na região");
+            }
+
+            var regioes = await _regiaoRepository.Listar();
+
+            if (regiao.VerificarRegiaoComNomeIgual(regioes))
+            {
+                _validacaoService.AddErro("Região com o mesmo nome já cadastrada");
+            }
+        }
+
+        public async Task<IEnumerable<ExportarRegiaoDTO>> Exportar()
+        {
+            var regioes = await _regiaoRepository.Listar();
+
+            return regioes.Select(p => new ExportarRegiaoDTO
+            {
+                Regiao = p.Nome,
+                Ativo = p.Ativo ? "Ativo" : "Inativo",
+                Uf = p.RegiaoCidades.Where(x => x.RegiaoId == p.Id).First().Cidade.UF,
+                Cidade = p.RegiaoCidades.Where(x => x.RegiaoId == p.Id).First().Cidade.Nome,
+            }).ToList();
         }
     }
 }

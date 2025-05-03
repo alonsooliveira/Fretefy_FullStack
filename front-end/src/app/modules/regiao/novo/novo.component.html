@@ -10,19 +10,27 @@
         <h3 style="margin-top: 20px;">Locais da região</h3>
         <div id="cityList" formArrayName="cidades">
             <div *ngFor="let cidade of cidades.controls; let i = index;">
-                <div class="city-group" [formGroupName]="i">
+                <div class="city-group" [formGroupName]="i" [value]="cidade.get('id').value">
                     <label>Cidade</label>
-                    <select formControlName="id">
-                        <option [selected]="true" value="">Selecione</option>
-                        <option value="0e7c9b72-a2f4-4320-b382-82c465ff36c5">Rio Branco</option>
-                        <option value="69031963-1d00-4ee7-9630-d770587b3e74">São Paulo</option>                       
-                    </select>
+                    <app-cidade-select formControlName="id"></app-cidade-select> 
+                    <!-- <select formControlName="id">
+                        <option [selected]="cidade.get('id').value == null" value="">Selecione</option>
+                        <option *ngFor="let c of listaCidades; let i = index;" [value]="c.id">{{c.nome}}</option>                       
+                    </select> -->
                     <button *ngIf="i > 0" type="button" class="remove-btn" (click)="removerCidade(i)">×</button>
                 </div>
             </div>
         </div>
 
+        <div *ngIf="erroAoAddCidade" id="error-message-add-city" class="error-message">
+            {{erroAoAddCidade}}
+        </div>
+
         <button type="button" class="add-btn" (click)="addCidadeFormGroup()">➕ Adicionar Cidade</button>
+
+        <div *ngIf="erroAoSalvar" id="error-message" class="error-message">
+            {{erroAoSalvar}}
+        </div>
 
         <div class="form-footer">
             <button type="button" class="cancel-btn" (click)="cancelar()">Cancelar</button>

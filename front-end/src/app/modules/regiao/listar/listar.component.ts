@@ -15,27 +15,26 @@ export class ListarComponent implements OnInit {
 
   constructor(
     private regiaoService: RegiaoService,
-    private router: Router) { 
-      this.listar();
-    }
+    private router: Router) {
+    this.listar();
+  }
 
   ngAfterViewInit(): void {
 
   }
 
   ngOnInit(): void {
-    
+
   }
 
   listar() {
     this.regiaoService.listar().subscribe((data) => {
       this.regioes = data;
-      console.log(this.regioes);
     });
   }
 
   ativar(regiao: any): void {
-    
+
     this.regiaoService.ativar(regiao.id).subscribe({
       next(success) { console.log('success'); },
       error(erro) { console.error(erro); },
@@ -57,6 +56,10 @@ export class ListarComponent implements OnInit {
 
   editar(id: string) {
     console.log(id);
-    this.router.navigate([`/regiao/editar/${id}`])
+    this.router.navigate([`/regiao/novo/${id}`])
+  }
+
+  exportar() {
+    this.regiaoService.exportar();
   }
 }

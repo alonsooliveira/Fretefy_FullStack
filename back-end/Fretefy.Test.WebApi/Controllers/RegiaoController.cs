@@ -3,6 +3,8 @@ using Fretefy.Test.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Fretefy.Test.WebApi.Controllers
@@ -59,6 +61,27 @@ namespace Fretefy.Test.WebApi.Controllers
         {
             await _regiaoService.Atualizar(regiao);
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("exportar")]
+        public async Task<FileResult> Exportar()
+        {
+            var regioes = await _regiaoService.Exportar();
+
+            using var memoryStream = new MemoryStream();
+            using (var streamWriter = new StreamWriter(memoryStream))
+            {
+                await streamWriter.WriteLineAsync($"Regiao, Situação, UF, Cidade");
+                foreach (var p in regioes)
+                {
+                    await streamWriter.WriteLineAsync($"{p.Regiao}, {p.Ativo}, {p.Uf}, {p.Cidade}");
+                    await streamWriter.FlushAsync();
+                }
+                await streamWriter.FlushAsync();
+            }
+
+            return File(memoryStream.ToArray(), "text/csv", $"regioies-{DateTime.Now:s}.csv");
         }
     }
 }
