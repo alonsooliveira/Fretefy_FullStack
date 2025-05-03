@@ -15,9 +15,12 @@ namespace Fretefy.Test.Domain.Services
         private readonly IRegiaoRepository _regiaoRepository;
         private readonly IValidacaoService _validacaoService;
 
-        public RegiaoService(IRegiaoRepository regiaoRepository)
+        public RegiaoService(
+            IRegiaoRepository regiaoRepository,
+            IValidacaoService validacaoService)
         {
             _regiaoRepository = regiaoRepository;
+            _validacaoService = validacaoService;
         }
 
         public async Task Ativar(Guid id)
@@ -53,9 +56,10 @@ namespace Fretefy.Test.Domain.Services
                 RegiaoId = regiaoDTO.Id
             }).ToList();
 
-            await Validar(regiao);
-
-            await _regiaoRepository.Atualizar(regiao);
+            if (await Validar(regiao))
+            {
+                await _regiaoRepository.Atualizar(regiao);
+            }
         }
 
         public async Task<IEnumerable<ListarRegiaoDTO>> ListarRegiao()
@@ -100,12 +104,11 @@ namespace Fretefy.Test.Domain.Services
 
             regiao.Ativar();
 
-            await Validar(regiao);
-
-            await _regiaoRepository.Salvar(regiao);
+            if (await Validar(regiao))
+                await _regiaoRepository.Salvar(regiao);
         }
 
-        private async Task Validar(Regiao regiao)
+        private async Task<bool> Validar(Regiao regiao)
         {
             if (regiao.VerificarCidadeDuplicada())
             {
@@ -118,6 +121,8 @@ namespace Fretefy.Test.Domain.Services
             {
                 _validacaoService.AddErro("Região com o mesmo nome já cadastrada");
             }
+
+            return !_validacaoService.Mensagens().Any();
         }
 
         public async Task<IEnumerable<ExportarRegiaoDTO>> Exportar()

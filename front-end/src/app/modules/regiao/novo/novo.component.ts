@@ -14,9 +14,8 @@ import { RegiaoService } from 'src/app/services/regiao.service';
 export class NovoComponent implements OnInit, AfterViewInit {
 
   regiaoForm: FormGroup;
-  public listaCidades: Array<CidadeLista>;
   private paramId: string;
-  erroAoSalvar: string;
+  errosAoSalvar: Array<string> = [];
   erroAoAddCidade: string;
 
   get cidades(): FormArray {
@@ -31,7 +30,6 @@ export class NovoComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute) {
     this.paramId = this.route.snapshot.paramMap.get('id');
     
-    this.listarCidades();
     this.regiaoForm = this.fb.group({
       id: [null],
       nome: [null, [Validators.required]],
@@ -59,13 +57,6 @@ export class NovoComponent implements OnInit, AfterViewInit {
       
     });
   }
-
-  listarCidades() {
-    this.cidadeService.listar().subscribe((data) => {
-      this.listaCidades = data;
-    });
-  }
-
   criarCidadeFormGroup(cidade: CidadeLista) {
     return this.fb.group({
       id: [cidade.id, [Validators.required]],
@@ -94,17 +85,15 @@ export class NovoComponent implements OnInit, AfterViewInit {
   }
 
   salvar() {
-    console.log(this.regiaoForm.value)
-    console.log(this.regiaoForm)
-    this.erroAoSalvar = "";
+    this.errosAoSalvar = [];
     if (this.regiaoForm.invalid) {
       var totalCidades = this.cidades.controls.filter(p => p.get("id").value != "").length;
       if (totalCidades == 0) {
-        this.erroAoSalvar = "É obrigatório, selecionar ao menos uma cidade a região";
+        this.errosAoSalvar = ["É obrigatório, selecionar ao menos uma cidade a região"];
         return;
       }
 
-      this.erroAoSalvar = "Campo obrigatórios não preenchidos";
+      this.errosAoSalvar = ["Campo obrigatórios não preenchidos"];
       return;
     }
 
@@ -116,14 +105,18 @@ export class NovoComponent implements OnInit, AfterViewInit {
       this.regiaoService.salvar(regiaoModel).subscribe(() => {
         this.router.navigate(["/regiao/"])
       }, error => {
-
+        error.error.validacoes.forEach((e: string) => {
+          this.errosAoSalvar.push(e);
+        })
       });
     } else {
       regiaoModel.id = this.paramId;
       this.regiaoService.atualizar(regiaoModel).subscribe(() => {
         this.router.navigate(["/regiao/"])
       }, error => {
-
+        error.error.validacoes.forEach((e: string) => {
+          this.errosAoSalvar.push(e);
+        })
       });
     }
   }

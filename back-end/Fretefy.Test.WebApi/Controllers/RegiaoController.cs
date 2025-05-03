@@ -11,11 +11,14 @@ namespace Fretefy.Test.WebApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class RegiaoController : ControllerBase
+    public class RegiaoController : BaseController
     {
         private readonly IRegiaoService _regiaoService;
 
-        public RegiaoController(IRegiaoService regiaoService)
+        public RegiaoController(
+            IRegiaoService regiaoService,
+            IValidacaoService validacaoService) 
+            : base(validacaoService)
         {
             _regiaoService = regiaoService;
         }
@@ -29,38 +32,34 @@ namespace Fretefy.Test.WebApi.Controllers
         [HttpGet("{id}")]
         public async Task<ListarRegiaoDTO> Get(Guid id)
         {
-            return await _regiaoService.ListarRegiaoPorId(id);
+            return await _regiaoService.ListarRegiaoPorId(id); 
         }
 
      
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] AdicionarRegiaoDTO regiao)
         {
-            await _regiaoService.Salvar(regiao);
-            return Ok();
+            return await Response(_regiaoService.Salvar(regiao));
         }
 
         [HttpPost]
         [Route("ativar")]
         public async Task<IActionResult> Ativar([FromBody] BaseDTO regiao)
         {
-            await _regiaoService.Ativar(regiao.Id);
-            return Ok();
+            return await Response(_regiaoService.Ativar(regiao.Id));
         }
 
         [HttpPost]
         [Route("desativar")]
         public async Task<IActionResult> Desativar([FromBody] BaseDTO regiao)
         {
-            await _regiaoService.Desativar(regiao.Id);
-            return Ok();
+            return await Response(_regiaoService.Desativar(regiao.Id));
         }
 
         [HttpPut]
         public async Task<IActionResult> Put([FromBody] AtualizarRegiaoDTO regiao)
         {
-            await _regiaoService.Atualizar(regiao);
-            return Ok();
+            return await Response(_regiaoService.Atualizar(regiao));
         }
 
         [HttpGet]

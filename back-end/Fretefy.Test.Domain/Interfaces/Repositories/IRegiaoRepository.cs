@@ -1,4 +1,5 @@
-﻿using Fretefy.Test.Domain.Entities;
+﻿using Fretefy.Test.Domain.DTOs;
+using Fretefy.Test.Domain.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -28,8 +28,8 @@
 
         <button type="button" class="add-btn" (click)="addCidadeFormGroup()">➕ Adicionar Cidade</button>
 
-        <div *ngIf="erroAoSalvar" id="error-message" class="error-message">
-            {{erroAoSalvar}}
+        <div *ngIf="errosAoSalvar.length" id="error-message" class="error-message">
+           <p *ngFor="let erro of errosAoSalvar">{{erro}}</p> 
         </div>
 
         <div class="form-footer">

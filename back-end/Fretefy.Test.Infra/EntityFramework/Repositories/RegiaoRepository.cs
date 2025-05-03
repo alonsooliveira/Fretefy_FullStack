@@ -1,4 +1,5 @@
-﻿using Fretefy.Test.Domain.Entities;
+﻿using Fretefy.Test.Domain.DTOs;
+using Fretefy.Test.Domain.Entities;
 using Fretefy.Test.Domain.Interfaces.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -26,7 +27,6 @@ namespace Fretefy.Test.Infra.EntityFramework.Repositories
         public async Task RemoverCidades(Regiao regiao)
         {
             _context.Set<RegiaoCidade>().RemoveRange(regiao.RegiaoCidades);
-            await _context.SaveChangesAsync();
         }
 
         public async Task<List<Regiao>> Listar()

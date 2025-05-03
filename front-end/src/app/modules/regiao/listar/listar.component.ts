@@ -36,7 +36,7 @@ export class ListarComponent implements OnInit {
   ativar(regiao: any): void {
 
     this.regiaoService.ativar(regiao.id).subscribe({
-      next(success) { console.log('success'); },
+      next(success) { },
       error(erro) { console.error(erro); },
       complete() { regiao.ativo = true; }
     });
@@ -44,7 +44,7 @@ export class ListarComponent implements OnInit {
 
   desativar(regiao: any): void {
     this.regiaoService.desativar(regiao.id).subscribe({
-      next(success) { console.log('success'); },
+      next(success) { },
       error(erro) { console.error(erro); },
       complete() { regiao.ativo = false; }
     });
@@ -55,7 +55,6 @@ export class ListarComponent implements OnInit {
   }
 
   editar(id: string) {
-    console.log(id);
     this.router.navigate([`/regiao/novo/${id}`])
   }
 

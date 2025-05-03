@@ -11,7 +11,6 @@ export class CidadeService {
   constructor(private http: HttpClient) { }
   
     listar(): Observable<Array<CidadeLista>> {
-      console.log('listar cidade service');
       return this.http
         .get<Array<CidadeLista>>('http://localhost:55700/api/cidade')
     }
